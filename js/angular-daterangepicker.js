@@ -17,7 +17,7 @@
         dateMax: '=max',
         model: '=ngModel',
         opts: '=options',
-        event: '='
+        events: '='
       },
       link: function($scope, element, attrs, modelCtrl) {
         var customOpts, el, opts, _formatted, _init, _picker, _validateMax, _validateMin;
