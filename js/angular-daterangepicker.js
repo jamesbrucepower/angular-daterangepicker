@@ -16,7 +16,8 @@
         dateMin: '=min',
         dateMax: '=max',
         model: '=ngModel',
-        opts: '=options'
+        opts: '=options',
+        event: '='
       },
       link: function($scope, element, attrs, modelCtrl) {
         var customOpts, el, opts, _formatted, _init, _picker, _validateMax, _validateMin;
@@ -42,6 +43,12 @@
             _picker.setEndDate(m);
           });
         };
+
+        $scope.externalEvents = {
+          onChange: angular.noop
+        };
+
+        angular.extend($scope.externalEvents, $scope.events || []);
 
         //Watchers enable resetting of start and end dates
         $scope.$watch('model.startDate', function(newValue) {
@@ -119,11 +126,13 @@
         };
         _init = function() {
           el.daterangepicker(opts, function(start, end, label) {
+            var newValue = {
+              startDate: start,
+              endDate: end
+            };
+            $scope.externalEvents.onChange(newValue);
             return $timeout(function() {
-              modelCtrl.$setViewValue({
-                startDate: start,
-                endDate: end
-              });
+              modelCtrl.$setViewValue(newValue);
               return modelCtrl.$render();
             });
           });
